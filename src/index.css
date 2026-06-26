@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #f7f5f0;
+  --charcoal: #1a1c1e;
+  --petrol: #0e3a4a;
+  --olive: #5c6b4a;
+  --smoke: #8a8f94;
+  /* Sistema oscuro-lujo (look del flyer navy + dorado metálico). */
+  --midnight: #0a1426;
+  --navy: #0f2036;
+  --navy-soft: #16293f;
+  --gold: #c9a24b;
+  --gold-bright: #e3c77a;
+  --gold-deep: #937234;
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--midnight);
+  color: var(--ivory);
+  font-family: 'Inter Variable', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Texto/borde dorado metálico (degradado sutil, no neón) — título-póster, kickers. */
+.text-gold-metallic {
+  background-image: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 52%, var(--gold-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hairline dorado para encuadrar tarjetas/chips estilo póster. */
+.gold-hairline {
+  border: 1px solid rgba(201, 162, 75, 0.35);
+}
+
+/* Display editorial (Fraunces variable): óptico automático + leve suavidad/peso. */
+.font-display {
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 28, 'WONK' 0, 'opsz' 96;
+}
+
+/* Glass controlado (tarjeta elevada sobre navy — antes "claro sobre marfil"). */
+.glass-light {
+  background: rgba(22, 41, 63, 0.6);
+  border: 1px solid rgba(201, 162, 75, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Glass controlado (sobre fondo pizarra) */
+.glass-dark {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Grano editorial sutil para fondos oscuros */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: rgba(201, 162, 75, 0.28);
+}
+
+/* Anclas que no quedan ocultas bajo las barras fijas (urgencia + header) */
+[id] {
+  scroll-margin-top: 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
