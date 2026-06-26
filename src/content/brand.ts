@@ -88,7 +88,7 @@ export type Deadline = {
 }
 
 export const DEADLINES: Record<string, Deadline> = {
-  '/reserva-masterclass': {
+  '/masterclass': {
     targetISO: MASTERCLASS.fechaISO,
     barLabel: `Masterclass gratis · ${MASTERCLASS.fechaLabel}`,
     barCta: { label: 'Reservar gratis', openForm: true },

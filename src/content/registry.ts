@@ -45,8 +45,8 @@ export const LANDINGS: readonly LandingMeta[] = [
   },
   {
     num: '01',
-    slug: 'reserva-masterclass',
-    route: '/reserva-masterclass',
+    slug: 'masterclass',
+    route: '/masterclass',
     title: 'Reserva Masterclass',
     subtitle: 'Cómo adquirir propiedades en subasta, paso a paso',
     kind: 'optin',
