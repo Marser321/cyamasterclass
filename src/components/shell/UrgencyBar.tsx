@@ -2,6 +2,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { CountdownTimer } from '../blocks'
 import { DEADLINES } from '../../content/brand'
 import { ArrowRight } from '../primitives/icons'
+import { openReservaForm } from '../forms/FormModal'
+
+const ctaClass =
+  'inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-to-b from-gold-bright to-gold-deep px-3 py-1 text-[12px] font-semibold text-midnight transition hover:brightness-110'
 
 /**
  * Barra slim de urgencia, FIJA sobre el header. CONTEXTUAL por ruta: solo aparece
@@ -30,13 +34,17 @@ export function UrgencyBar() {
           |
         </span>
         <CountdownTimer targetISO={deadline.targetISO} variant="inline" expiredLabel="Próxima fecha: pronto" />
-        <Link
-          to={deadline.barCta.to}
-          className="inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-to-b from-gold-bright to-gold-deep px-3 py-1 text-[12px] font-semibold text-midnight transition hover:brightness-110"
-        >
-          {deadline.barCta.label}
-          <ArrowRight className="text-[11px]" />
-        </Link>
+        {deadline.barCta.openForm ? (
+          <button type="button" onClick={openReservaForm} className={ctaClass}>
+            {deadline.barCta.label}
+            <ArrowRight className="text-[11px]" />
+          </button>
+        ) : (
+          <Link to={deadline.barCta.to ?? '/'} className={ctaClass}>
+            {deadline.barCta.label}
+            <ArrowRight className="text-[11px]" />
+          </Link>
+        )}
       </div>
     </div>
   )

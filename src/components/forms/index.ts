@@ -1,5 +1,6 @@
 export { LeadForm } from './LeadForm'
 export { GHLForm } from './GHLForm'
+export { FormModal, openReservaForm, RESERVA_FORM_EVENT } from './FormModal'
 export { CheckoutMock } from './CheckoutMock'
 export type { CheckoutProduct } from './CheckoutMock'
 export { CalendarButton } from './CalendarButton'

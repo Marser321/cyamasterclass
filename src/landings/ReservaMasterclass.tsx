@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
   Section,
   Container,
@@ -18,7 +19,7 @@ import {
 } from '../components/blocks'
 import { LandingHero, LandingLayout } from '../components/shell'
 import { Img } from '../components/media'
-import { GHLForm } from '../components/forms'
+import { FormModal, RESERVA_FORM_EVENT } from '../components/forms'
 import { MAP9_PHASES, MASTERCLASS } from '../content/brand'
 import { img, LANDING_BANNER } from '../content/images'
 import { sectionBg } from '../content/section-backgrounds'
@@ -37,6 +38,16 @@ const APRENDERAS = [
 ]
 
 export default function ReservaMasterclass() {
+  const [formOpen, setFormOpen] = useState(false)
+  const openForm = () => setFormOpen(true)
+
+  // La barra de urgencia (compartida) abre el popup vía evento global.
+  useEffect(() => {
+    const handler = () => setFormOpen(true)
+    window.addEventListener(RESERVA_FORM_EVENT, handler)
+    return () => window.removeEventListener(RESERVA_FORM_EVENT, handler)
+  }, [])
+
   return (
     <LandingLayout hideWhatsApp>
       {/* 1 · Hero a una pantalla: contador → H1 → video protagonista → botón siempre visible */}
@@ -59,27 +70,11 @@ export default function ReservaMasterclass() {
           </span>
         }
         actions={
-          <CTAButton
-            onClick={() => document.getElementById('reservar')?.scrollIntoView({ behavior: 'smooth' })}
-            icon={<Icon.ArrowRight />}
-            size="lg"
-            magnetic
-          >
+          <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} size="lg" magnetic>
             Reservar mi lugar
           </CTAButton>
         }
       />
-
-      {/* 1b · Formulario de reserva (el botón del hero hace scroll hasta aquí) */}
-      <Section id="reservar" tone="charcoal" pad="lg" className="scroll-mt-16">
-        <Container width="narrow" className="text-center">
-          <h2 className="font-display text-2xl font-semibold text-ivory">Reserva tu cupo gratis</h2>
-          <p className="mt-2 text-[14px] text-ivory/60">Tu nombre y WhatsApp. Te enviamos el enlace de acceso.</p>
-          <Reveal className="mx-auto mt-6 max-w-md text-left">
-            <GHLForm formId="SuF59qryOrh5DqOu3hyR" formName="MASTERCLASS" title="MASTERCLASS" height={490} />
-          </Reveal>
-        </Container>
-      </Section>
 
       {/* 2 · Qué aprenderás (problema + cambios + 9 fases, fusionado) */}
       <Section tone="ivory" pad="lg" texture={sectionBg('01-reserva-masterclass', 1)}>
@@ -242,12 +237,15 @@ export default function ReservaMasterclass() {
             <CountdownTimer targetISO={MASTERCLASS.fechaISO} className="items-center" />
           </div>
           <div className="mt-7 flex justify-center">
-            <CTAButton href="#top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} icon={<Icon.ArrowRight />} magnetic>
+            <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} magnetic>
               Reserva tu cupo gratis
             </CTAButton>
           </div>
         </Container>
       </Section>
+
+      {/* Popup de lujo con el form embebido (lo abren los CTAs) */}
+      <FormModal open={formOpen} onClose={() => setFormOpen(false)} />
     </LandingLayout>
   )
 }

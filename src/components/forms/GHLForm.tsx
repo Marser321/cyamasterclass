@@ -18,7 +18,7 @@ function ensureEmbedScript() {
  *
  * El destino tras enviar (redirect a la gracias o mensaje) se configura en el
  * builder del form dentro de GHL, no aquí. Para mantener el funnel, en GHL
- * poné "On submit → Redirect" hacia `/l/02-gracias-reserva`.
+ * poné "On submit → Redirect" hacia `/gracias-reserva`.
  */
 export function GHLForm({
   formId,

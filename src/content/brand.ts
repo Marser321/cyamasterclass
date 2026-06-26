@@ -81,24 +81,18 @@ export type Deadline = {
   targetISO: string
   /** Texto de la barra superior (p. ej. "Masterclass gratis · Martes 14 de julio"). */
   barLabel: string
-  /** CTA de la barra. */
-  barCta: { to: string; label: string }
+  /** CTA de la barra. `openForm` abre el popup de reserva; si no, enlaza a `to`. */
+  barCta: { label: string; to?: string; openForm?: boolean }
   /** Texto que precede al contador en el hero (p. ej. "La próxima sesión empieza en"). */
   heroLabel: string
 }
 
 export const DEADLINES: Record<string, Deadline> = {
-  '/l/01-reserva': {
+  '/reserva-masterclass': {
     targetISO: MASTERCLASS.fechaISO,
     barLabel: `Masterclass gratis · ${MASTERCLASS.fechaLabel}`,
-    barCta: { to: '/l/01-reserva', label: 'Reservar gratis' },
+    barCta: { label: 'Reservar gratis', openForm: true },
     heroLabel: 'La próxima clase en vivo empieza en',
-  },
-  '/l/03-intensivo': {
-    targetISO: COHORTE.intensivoISO,
-    barLabel: 'Intensivo MAP-9 · cupo limitado',
-    barCta: { to: '/l/03-intensivo', label: 'Ver el intensivo' },
-    heroLabel: 'El intensivo en vivo empieza en',
   },
 }
 
