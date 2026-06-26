@@ -76,7 +76,7 @@ export default function ReservaMasterclass() {
           <h2 className="font-display text-2xl font-semibold text-ivory">Reserva tu cupo gratis</h2>
           <p className="mt-2 text-[14px] text-ivory/60">Tu nombre y WhatsApp. Te enviamos el enlace de acceso.</p>
           <Reveal className="mx-auto mt-6 max-w-md text-left">
-            <GHLForm formId="SuF59qryOrh5DqOu3hyR" formName="MASTERCLASS" title="MASTERCLASS" height={586} />
+            <GHLForm formId="SuF59qryOrh5DqOu3hyR" formName="MASTERCLASS" title="MASTERCLASS" height={490} />
           </Reveal>
         </Container>
       </Section>
