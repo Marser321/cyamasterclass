@@ -102,7 +102,7 @@ export function LandingHero({
         vertical={BANNER_VIDEO.vertical}
         alt={banner.alt}
         fill
-        className="mx-auto h-full max-w-3xl"
+        className="mx-auto h-full w-full max-w-5xl"
       />
     ) : (
       <Img
@@ -111,7 +111,7 @@ export function LandingHero({
         label={banner.alt}
         kenBurns={false}
         priority
-        className="mx-auto h-full max-w-3xl"
+        className="mx-auto h-full w-full max-w-5xl"
       />
     )
   )
@@ -121,8 +121,8 @@ export function LandingHero({
   // layout se ve igual de balanceado en todas las resoluciones y el CTA nunca queda
   // pegado al fondo (antes el banner se estiraba y dejaba un hueco vacío).
   const fillSpine = (
-    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5 text-center">
-      <div className="flex flex-col items-center gap-4">
+    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-4 text-center sm:gap-5">
+      <div className="flex max-w-3xl flex-col items-center gap-3 sm:gap-4">
         {countdown && (
           <CountdownTimer
             targetISO={countdown.targetISO}
@@ -136,9 +136,9 @@ export function LandingHero({
           {title}
         </DisplayHeading>
       </div>
-      {bannerFillNode && <div className="h-[32svh] w-full">{bannerFillNode}</div>}
-      <div className="flex flex-col items-center gap-3">
-        {sub && <div className="max-w-xl text-[15px] leading-relaxed text-ivory/75 sm:text-[17px]">{sub}</div>}
+      {bannerFillNode && <div className="h-[38svh] w-full sm:h-[42svh]">{bannerFillNode}</div>}
+      <div className="flex max-w-xl flex-col items-center gap-3">
+        {sub && <div className="text-[15px] leading-relaxed text-ivory/75 sm:text-[17px]">{sub}</div>}
         {actions && (
           <div className="flex flex-wrap items-center justify-center gap-3">{actions}</div>
         )}
