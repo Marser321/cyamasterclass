@@ -10,6 +10,7 @@ import {
   Icon,
 } from '../components/primitives'
 import { Reveal, Stagger, RevealItem } from '../components/motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Hero, LandingLayout } from '../components/shell'
 import { CalendarButton } from '../components/forms'
 import { Img } from '../components/media'
@@ -21,6 +22,9 @@ import { toICSDate } from '../lib/ics'
 // Fecha/hora — derivada de la fuente única (brand.ts) para que coincida con el
 // contador de la página de reserva y con el .ics del botón de calendario.
 const FECHA = `${MASTERCLASS.fechaLabel} · ${MASTERCLASS.horaLabel} · ${MASTERCLASS.zonaLabel}`
+
+// Enlace directo al grupo/comunidad de WhatsApp (acción principal del gracias).
+const COMUNIDAD_URL = 'https://chat.whatsapp.com/BqJKLVnOSmd6clrtgtMDfS'
 
 const PASOS = [
   {
@@ -101,11 +105,12 @@ export default function GraciasReserva() {
               <Icon.Calendar /> {FECHA}
             </Badge>
           </div>
-          <div className="mt-7 flex justify-center">
-            <CalendarMasterclassButton variant="light" />
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <ComunidadButton />
+            <CalendarMasterclassButton variant="secondary" />
           </div>
-          <p className="mt-4 text-[13px] text-ivory/55">
-            Revisa tu WhatsApp y correo para el enlace de acceso.
+          <p className="mt-5 text-[13px] text-ivory/55">
+            Únete a la comunidad para recibir el enlace, recordatorios y apoyo en vivo.
           </p>
         </div>
       </Hero>
@@ -213,6 +218,43 @@ export default function GraciasReserva() {
       </Section>
 
     </LandingLayout>
+  )
+}
+
+/** CTA PRINCIPAL y animado del gracias: unirse a la comunidad de WhatsApp.
+ *  Verde WhatsApp para reconocibilidad inmediata + halo pulsante para que sea el
+ *  foco visual del hero. Respeta `prefers-reduced-motion` (sin loop ni hover-lift). */
+function ComunidadButton() {
+  const reduce = useReducedMotion()
+  return (
+    <motion.div
+      className="relative inline-flex"
+      initial={{ opacity: 0, y: 12, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {!reduce && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute -inset-2 rounded-full bg-[#25D366]/40 blur-lg"
+          animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.95, 1.08, 0.95] }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
+      <motion.a
+        href={COMUNIDAD_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Únete a la comunidad de WhatsApp"
+        className="relative inline-flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-b from-[#2EE06E] to-[#16A34A] px-8 py-4 text-base font-bold text-white shadow-[0_14px_40px_-10px_rgba(37,211,102,0.6)] ring-1 ring-white/25 transition-[filter] hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:text-lg"
+        whileHover={reduce ? undefined : { scale: 1.04, y: -2 }}
+        whileTap={{ scale: 0.97 }}
+      >
+        <Icon.Whatsapp className="text-xl" />
+        Únete a la comunidad
+        <Icon.ArrowRight className="text-sm opacity-90" />
+      </motion.a>
+    </motion.div>
   )
 }
 
