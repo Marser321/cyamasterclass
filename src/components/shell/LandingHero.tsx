@@ -116,10 +116,15 @@ export function LandingHero({
     )
   )
 
-  // Hero a ~una pantalla: el clúster (relojes+H1 → banner acotado → CTA) se CENTRA
-  // como una unidad. El banner tiene altura acotada y estable (no `flex-1`), así el
-  // layout se ve igual de balanceado en todas las resoluciones y el CTA nunca queda
-  // pegado al fondo (antes el banner se estiraba y dejaba un hueco vacío).
+  // Hero a ~una pantalla: el clúster (relojes+H1 → banner → CTA) se CENTRA como una
+  // unidad. La sección es `min-h-svh` (NO `h-svh`): en pantallas cortas crece en vez
+  // de recortar, así el CTA nunca queda fuera de pantalla (con `h-svh`+overflow-hidden
+  // se cortaba en móviles pequeños). El banner usa altura ACOTADA y adaptativa (no
+  // `flex-1`, que con video 9:16 desborda): `clamp(150px, 100svh - reserva, tope-svh)`.
+  // La reserva fija (26/27rem) deja sitio al resto del clúster, que es altura casi-fija
+  // en px; así el banner es grande en pantallas altas (llega al tope 46/42svh) y encoge
+  // en cortas para mantener el CTA dentro del fold. Verificado 320×568 → 430×932 (móvil)
+  // y 1366×640 → 1280×800 (desktop). No reintroducir `flex-1` ni el tope `h-svh`.
   const fillSpine = (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-4 text-center sm:gap-5">
       <div className="flex max-w-3xl flex-col items-center gap-3 sm:gap-4">
@@ -136,7 +141,9 @@ export function LandingHero({
           {title}
         </DisplayHeading>
       </div>
-      {bannerFillNode && <div className="h-[46svh] w-full sm:h-[42svh]">{bannerFillNode}</div>}
+      {bannerFillNode && (
+        <div className="h-[clamp(150px,calc(100svh_-_26rem),46svh)] w-full sm:h-[clamp(150px,calc(100svh_-_27rem),42svh)]">{bannerFillNode}</div>
+      )}
       <div className="flex max-w-xl flex-col items-center gap-3">
         {sub && <div className="text-[15px] leading-relaxed text-ivory/75 sm:text-[17px]">{sub}</div>}
         {actions && (
