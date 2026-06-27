@@ -57,8 +57,8 @@ export const LANDINGS: readonly LandingMeta[] = [
   },
   {
     num: '02',
-    slug: 'gracias-reserva',
-    route: '/gracias-reserva',
+    slug: 'gracias',
+    route: '/gracias',
     title: 'Gracias — Reserva',
     subtitle: 'Confirmación + preparación para la masterclass',
     kind: 'thankyou',

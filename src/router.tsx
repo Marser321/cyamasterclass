@@ -20,11 +20,12 @@ export const router = createBrowserRouter([
   // El dominio abre directo en el registro de la masterclass.
   { path: '/', element: <Navigate to="/masterclass" replace /> },
   { path: '/masterclass', element: <ReservaMasterclass /> },
-  { path: '/gracias-reserva', element: <GraciasReserva /> },
+  { path: '/gracias', element: <GraciasReserva /> },
   // Redirects legacy (slugs anteriores) por si quedó algún enlace.
   { path: '/reserva-masterclass', element: <Navigate to="/masterclass" replace /> },
+  { path: '/gracias-reserva', element: <Navigate to="/gracias" replace /> },
   { path: '/l/01-reserva', element: <Navigate to="/masterclass" replace /> },
-  { path: '/l/02-gracias-reserva', element: <Navigate to="/gracias-reserva" replace /> },
+  { path: '/l/02-gracias-reserva', element: <Navigate to="/gracias" replace /> },
   { path: '*', element: <NotFound /> },
 ], {
   // Opt-in temprano a los future flags de v7 (silencia warnings en consola).

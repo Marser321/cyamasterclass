@@ -69,7 +69,7 @@ export function Hero({
       <Container
         className={cn(
           fillViewport
-            ? 'flex min-h-svh flex-col pt-14 pb-5 sm:pt-16 sm:pb-6'
+            ? 'flex h-svh min-h-svh flex-col pt-12 pb-4 sm:pt-16 sm:pb-6'
             : cn('pb-16 sm:pb-24', hasBar ? 'pt-24 sm:pt-28' : 'pt-14 sm:pt-20'),
         )}
       >
