@@ -26,8 +26,8 @@ export function UrgencyBar() {
       aria-label={deadline.barLabel}
       className="fixed inset-x-0 top-0 z-50 border-b border-gold/25 bg-midnight/95 backdrop-blur-md"
     >
-      <div className="mx-auto flex h-11 max-w-stage items-center justify-center gap-2.5 px-4 sm:h-12 sm:gap-4 sm:px-6">
-        <span className="hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-gold sm:inline">
+      <div className="mx-auto flex h-12 max-w-stage items-center justify-center gap-2.5 px-4 sm:h-[52px] sm:gap-4 sm:px-6">
+        <span className="hidden text-[12px] font-semibold uppercase tracking-[0.1em] text-gold sm:inline sm:text-[13px]">
           {deadline.barLabel}
         </span>
         <span aria-hidden className="hidden text-gold/25 sm:inline">

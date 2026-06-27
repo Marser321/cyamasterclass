@@ -28,9 +28,9 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 function Unit({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex min-w-[3.5rem] flex-col items-center rounded-xl bg-navy-soft/70 px-3 py-2 gold-hairline sm:min-w-[4.25rem]">
-      <span className="font-display text-2xl font-semibold tabular-nums text-ivory sm:text-3xl">{value}</span>
-      <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-gold/80">{label}</span>
+    <div className="flex min-w-[3.75rem] flex-col items-center rounded-xl bg-navy-soft/70 px-3.5 py-2 gold-hairline sm:min-w-[4.75rem]">
+      <span className="font-display text-3xl font-semibold tabular-nums text-ivory sm:text-4xl">{value}</span>
+      <span className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold/80">{label}</span>
     </div>
   )
 }
@@ -81,7 +81,7 @@ export function CountdownTimer({
       <div
         role="timer"
         aria-label={`Faltan ${parts.dias} días`}
-        className={cn('flex items-center gap-1.5 font-display text-[13px] font-semibold text-ivory sm:gap-2 sm:text-sm', className)}
+        className={cn('flex items-center gap-1.5 font-display text-sm font-semibold text-ivory sm:gap-2.5 sm:text-[15px]', className)}
       >
         <InlineUnit value={pad(parts.dias)} unit="d" />
         <span className="text-gold/40">·</span>
