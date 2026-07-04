@@ -33,7 +33,7 @@ const CAMBIOS = [
 const APRENDERAS = [
   'Las 9 fases del Método MAP-9 para analizar una subasta.',
   'Cómo descartar las propiedades problemáticas antes de comprar.',
-  'Cómo fondear con crédito empresarial al 0% (APR promocional).',
+  'Cómo conseguir crédito de negocio al 0% de interés por 12 meses para apalancar estos proyectos de inversión.',
   'Cómo calcular el capital total de entrada antes de pujar.',
 ]
 
@@ -150,9 +150,9 @@ export default function ReservaMasterclass() {
                 heading: 'Para ti, si…',
                 variant: 'positive',
                 items: [
-                  'Quieres entender el proceso público sin adivinar.',
-                  'Tienes (o estás reuniendo) un capital de $1k–$20k.',
-                  'Prefieres aprender qué descartar antes de comprar.',
+                  'Eres emprendedor y quieres comenzar a invertir en bienes raíces.',
+                  'Tienes un capital ya ahorrado o tu crédito personal en buen estado.',
+                  'Quieres aprender cómo conseguir propiedades en la subasta de los condados.',
                 ],
               }}
               right={{
@@ -161,7 +161,7 @@ export default function ReservaMasterclass() {
                 items: [
                   'Buscas hacerte rico rápido.',
                   'No vas a verificar la información en los sitios del condado.',
-                  'Esperas que alguien invierta por ti sin entender el riesgo.',
+                  'Buscas que te consigan las propiedades y no estás interesado en aprender a buscarlas por ti mismo.',
                 ],
               }}
             />
