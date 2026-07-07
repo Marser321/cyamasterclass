@@ -37,7 +37,7 @@ export const USE_FLYER_IMAGE = false
 // public/img/<NN>/ con este nombre y, mientras no exista, <Img> muestra el
 // placeholder elegante. Ratio 4x5 (móvil-first; igual que el flyer oficial).
 export const LANDING_BANNER: Record<string, string> = {
-  '01': '/img/01/01-reserva-masterclass__banner-fundadores--4x5.png',
+  '01': '/img/01/01-reserva-masterclass__banner-fijo.png',
   '03': '/img/03/03-compra-intensivo__banner-cohorte--4x5.png',
   '07': '/img/07/07-autoridad-argenis__banner-fundadores--4x5.png',
   '05': '/img/05/05-compra-mentoria__banner-fundadores--4x5.png',

@@ -41,11 +41,13 @@ export function LandingHero({
   align = 'left',
   titleSize = 'xl',
   fillViewport = false,
+  useVideo,
   className,
 }: {
   image?: HeroImage
   tone?: 'charcoal' | 'petrol' | 'ivory'
   parallax?: boolean
+  useVideo?: boolean
   /** Solo donde hay fecha real (masterclass, intensivo). */
   countdown?: { targetISO: string; label?: string; expiredLabel?: string }
   /** Banner enmarcado tras el H1. `src` se ignora hasta USE_LANDING_BANNER=true. */
@@ -65,9 +67,10 @@ export function LandingHero({
 }) {
   const centered = align === 'center'
   const twoCol = Boolean(aside) && !centered && !fillViewport
+  const showVideo = useVideo !== undefined ? useVideo : USE_BANNER_VIDEO
 
   const bannerNode = banner && (
-    USE_BANNER_VIDEO ? (
+    showVideo ? (
       // Banner de video (flyer animado): vertical en móvil, horizontal en desktop.
       // En modo centrado (01) es la IDEA CENTRAL → más grande; si no, tamaño normal.
       <Reveal className={cn('w-full', centered ? 'mx-auto max-w-2xl lg:max-w-3xl' : 'max-w-sm lg:max-w-xl')}>
@@ -81,13 +84,13 @@ export function LandingHero({
       <Reveal className={cn('w-full max-w-sm', centered && 'mx-auto')}>
         <div className="overflow-hidden rounded-2xl gold-hairline shadow-glass-dark">
           <Img
-            src={USE_LANDING_BANNER ? banner.src : undefined}
+            src={useVideo === false ? banner.src : (USE_LANDING_BANNER ? banner.src : undefined)}
             alt={banner.alt}
             label={banner.alt}
             focal={banner.focal}
             kenBurns={false}
             priority
-            className={RATIO_CLASS[banner.ratio ?? '4x5']}
+            className={cn(RATIO_CLASS[banner.ratio ?? '4x5'], useVideo === false && '[&_img]:object-contain bg-transparent')}
           />
         </div>
       </Reveal>
@@ -96,7 +99,7 @@ export function LandingHero({
 
   // Video que llena el bloque medio del hero a-pantalla (object-contain, sin recorte).
   const bannerFillNode = banner && (
-    USE_BANNER_VIDEO ? (
+    showVideo ? (
       <BannerVideoCycle
         horizontal={BANNER_VIDEO.horizontal}
         vertical={BANNER_VIDEO.vertical}
@@ -106,12 +109,12 @@ export function LandingHero({
       />
     ) : (
       <Img
-        src={USE_LANDING_BANNER ? banner.src : undefined}
+        src={useVideo === false ? banner.src : (USE_LANDING_BANNER ? banner.src : undefined)}
         alt={banner.alt}
         label={banner.alt}
         kenBurns={false}
         priority
-        className="mx-auto h-full w-full max-w-5xl"
+        className="mx-auto h-full w-full max-w-5xl [&_img]:object-contain bg-transparent"
       />
     )
   )

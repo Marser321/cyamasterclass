@@ -54,6 +54,7 @@ export default function ReservaMasterclass() {
       <LandingHero
         tone="charcoal"
         fillViewport
+        useVideo={false}
         titleSize="lg"
         image={{
           src: img('01', '01-reserva-masterclass__hero-fundadores-trabajando.png'),
