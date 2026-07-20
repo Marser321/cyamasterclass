@@ -24,7 +24,7 @@ import { toICSDate } from '../lib/ics'
 const FECHA = `${MASTERCLASS.fechaLabel} · ${MASTERCLASS.horaLabel} · ${MASTERCLASS.zonaLabel}`
 
 // Enlace directo al grupo/comunidad de WhatsApp (acción principal del gracias).
-const COMUNIDAD_URL = 'https://chat.whatsapp.com/BqJKLVnOSmd6clrtgtMDfS'
+const COMUNIDAD_URL = 'https://chat.whatsapp.com/K5DcdD6vYf8JnxNzWUWEY3'
 
 const PASOS = [
   {
