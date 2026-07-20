@@ -1,5 +1,6 @@
 export { UrgencyBar } from './UrgencyBar'
 export { Footer } from './Footer'
+export { SeguridadNote } from './SeguridadNote'
 export { FloatingWhatsApp } from './FloatingWhatsApp'
 export { LiveActivityToasts } from './LiveActivityToasts'
 export { Hero } from './Hero'

@@ -42,9 +42,27 @@ export const FIGURE_LABELS = {
     'Las reglas de redención, gravámenes, notificación y fees varían por estado y condado; requiere verificación local.',
 } as const
 
-/** Banner global del entorno: deja claro que es una demo sin cobros reales. */
+/**
+ * Nota de entorno demo. ⚠ YA NO SE MUESTRA en el sitio: se quitó del `Footer` al
+ * pasar a producción, porque el formulario de registro (GHL) capta leads REALES
+ * y la línea "pagos simulados" contradecía eso. Solo queda referenciada por
+ * `CheckoutMock` (componente sin usar en este repo). No reintroducir en el pie.
+ */
 export const DEMO_NOTE =
   'Versión de demostración — los formularios y pagos son simulados (sin cobro real).'
+
+/**
+ * Aviso de seguridad al pie de registro y gracias. Nace de intentos de robo de
+ * cuentas de WhatsApp a personas de los grupos: el vector es que alguien se hace
+ * pasar por el equipo y pide el código de verificación de 6 dígitos.
+ * Tono: declarativo y tranquilo — decimos qué NO pedimos y por dónde SÍ llega
+ * todo, sin describir la estafa ni meter miedo. Cortito y al pie, a propósito.
+ */
+export const SEGURIDAD_NOTE = {
+  title: 'Aviso de seguridad',
+  body:
+    'La masterclass es 100% gratuita. Nadie de nuestro equipo te va a pedir dinero, códigos de verificación ni que compartas datos de tu cuenta. Todo lo que necesitas llega al grupo oficial de WhatsApp, y el enlace de Zoom lo comparten Carmen y Argenis ahí mismo.',
+} as const
 
 // ─────────────────────────────────────────────────────────────────────────
 //  CARVE-OUT "oscuro-lujo" (decisión del cliente 2026-06-24). El sistema visual
@@ -53,9 +71,9 @@ export const DEMO_NOTE =
 //   · Dorado metálico sobrio SÍ · dorado neón/fluorescente NO.
 //   · Contador a una FECHA REAL (la próxima sesión) SÍ; countdown perpetuo o que
 //     se reinicia solo NO (eso sería "urgencia falsa"). Ver MASTERCLASS.fechaISO.
-//   · Toasts de actividad ("Fulano reservó") = SIMULADOS e ILUSTRATIVOS de la
-//     demo (content/social-proof.ts), cubiertos por DEMO_NOTE + su micro-nota.
-//     En producción deben alimentarse de registros REALES (no fabricar prueba
-//     social — implicación FTC).
+//   · Toasts de actividad ("Fulano reservó") = QUITADOS del sitio en producción
+//     (eran nombres inventados de content/social-proof.ts). Para reactivarlos hay
+//     que alimentarlos con registros REALES del CRM — no fabricar prueba social
+//     (implicación FTC).
 //  Las frases prohibidas (garantizado, sin riesgo, pre-aprobado…) siguen intactas.
 // ─────────────────────────────────────────────────────────────────────────

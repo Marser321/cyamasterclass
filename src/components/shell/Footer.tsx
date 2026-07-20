@@ -1,7 +1,6 @@
 import { Container } from '../primitives/Container'
 import { Disclaimer } from '../primitives/Disclaimer'
 import { BRAND, FOUNDERS } from '../../content/brand'
-import { DEMO_NOTE } from '../../content/compliance'
 
 /** Pie de página simple: marca, "no somos asesores" y el disclaimer íntegro plegable.
  *  Sin sitemap del funnel: cada landing se comparte sola y sus propios CTA llevan
@@ -24,7 +23,6 @@ export function Footer() {
         <div className="mt-8">
           <Disclaimer tone="dark" collapsible defaultOpen={false} />
         </div>
-        <p className="mt-4 text-center text-[11.5px] text-ivory/55">{DEMO_NOTE}</p>
       </Container>
     </footer>
   )
