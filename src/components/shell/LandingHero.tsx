@@ -49,8 +49,16 @@ export function LandingHero({
   parallax?: boolean
   useVideo?: boolean
   /** Solo donde hay fecha real (masterclass, intensivo). `targetISO` puede ser
-   *  una función para horarios recurrentes (ver CountdownTimer / lib/schedule). */
-  countdown?: { targetISO: string | (() => string); label?: string; expiredLabel?: string }
+   *  una función para horarios recurrentes (ver CountdownTimer / lib/schedule).
+   *  `hideOnMobile`: en el teléfono la UrgencyBar ya muestra el conteo justo
+   *  arriba — ocultar los chips evita el contador duplicado y le da esa altura
+   *  al banner (ver `fillSpine`). */
+  countdown?: {
+    targetISO: string | (() => string)
+    label?: string
+    expiredLabel?: string
+    hideOnMobile?: boolean
+  }
   /** Banner enmarcado tras el H1. `src` se ignora hasta USE_LANDING_BANNER=true. */
   banner?: { src?: string; alt: string; ratio?: Ratio; focal?: string }
   kicker?: ReactNode
@@ -125,20 +133,28 @@ export function LandingHero({
   // de recortar, así el CTA nunca queda fuera de pantalla (con `h-svh`+overflow-hidden
   // se cortaba en móviles pequeños). El banner usa altura ACOTADA y adaptativa (no
   // `flex-1`, que con video 9:16 desborda): `clamp(150px, 100svh - reserva, tope-svh)`.
-  // La reserva fija (26/27rem) deja sitio al resto del clúster, que es altura casi-fija
-  // en px; así el banner es grande en pantallas altas (llega al tope 46/42svh) y encoge
-  // en cortas para mantener el CTA dentro del fold. Verificado 320×568 → 430×932 (móvil)
-  // y 1366×640 → 1280×800 (desktop). No reintroducir `flex-1` ni el tope `h-svh`.
+  // La reserva fija deja sitio al resto del clúster, que es altura casi-fija en px;
+  // así el banner es grande en pantallas altas (llega al tope svh) y encoge en cortas
+  // para mantener el CTA dentro del fold.
+  //  · MÓVIL: reserva 25rem / tope 54svh. Es más generosa que la de desktop porque
+  //    con `countdown.hideOnMobile` los chips no ocupan lugar (el conteo vive en la
+  //    UrgencyBar) — esa altura se la queda el banner, que es la pieza que vende.
+  //  · sm+: reserva 32rem / tope 42svh (ahí sí están los chips).
+  // Verificado 320×568 → 430×932 (móvil) y 1366×640 → 1280×800 (desktop).
+  // No reintroducir `flex-1` ni el tope `h-svh`.
   const fillSpine = (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-4 text-center sm:gap-5">
       <div className="flex max-w-3xl flex-col items-center gap-3 sm:gap-4">
         {countdown && (
-          <CountdownTimer
-            targetISO={countdown.targetISO}
-            label={countdown.label}
-            expiredLabel={countdown.expiredLabel}
-            variant="chips"
-          />
+          <div className={cn('w-full', countdown.hideOnMobile && 'hidden sm:block')}>
+            <CountdownTimer
+              targetISO={countdown.targetISO}
+              label={countdown.label}
+              expiredLabel={countdown.expiredLabel}
+              variant="chips"
+              className="items-center"
+            />
+          </div>
         )}
         {kicker}
         <DisplayHeading as="h1" size={titleSize}>
@@ -146,7 +162,7 @@ export function LandingHero({
         </DisplayHeading>
       </div>
       {bannerFillNode && (
-        <div className="h-[clamp(130px,calc(100svh_-_33rem),46svh)] w-full sm:h-[clamp(150px,calc(100svh_-_32rem),42svh)]">{bannerFillNode}</div>
+        <div className="h-[clamp(150px,calc(100svh_-_25rem),54svh)] w-full sm:h-[clamp(150px,calc(100svh_-_32rem),42svh)]">{bannerFillNode}</div>
       )}
       <div className="flex max-w-xl flex-col items-center gap-3">
         {sub && <div className="text-[15px] leading-relaxed text-ivory/75 sm:text-[17px]">{sub}</div>}

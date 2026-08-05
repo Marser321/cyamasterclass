@@ -17,12 +17,13 @@ import {
   PropertyShowcase,
   CountdownTimer,
 } from '../components/blocks'
-import { LandingHero, LandingLayout } from '../components/shell'
+import { LandingHero, LandingLayout, MobileStickyCTA } from '../components/shell'
 import { Img } from '../components/media'
 import { FormModal, RESERVA_FORM_EVENT } from '../components/forms'
 import { MAP9_PHASES, MASTERCLASS } from '../content/brand'
 import { img, LANDING_BANNER } from '../content/images'
 import { sectionBg } from '../content/section-backgrounds'
+import { useEvergreenTarget } from '../lib/useEvergreenTarget'
 
 const CAMBIOS = [
   { from: 'Adivinar qué comprar', to: 'Filtro de seguridad', icon: <Icon.Filter /> },
@@ -41,9 +42,33 @@ const APRENDERAS = [
   'Cómo calcular el capital total de entrada antes de pujar.',
 ]
 
+/**
+ * Fecha exacta de la próxima emisión, SOLO en móvil: de `sm` para arriba la
+ * barra de urgencia ya la muestra, y en el teléfono la esconde por espacio — así
+ * la fecha está siempre visible en las dos vistas, sin repetirse en ninguna.
+ */
+function FechaProximaClase() {
+  return (
+    // Dos líneas fijas (no `flex-wrap`): así el alto del chip no cambia según lo
+    // largo que sea la fecha de la semana ("Martes 1 de septiembre" vs "Martes 5").
+    <div className="mx-auto rounded-2xl border border-gold/35 bg-gold/[0.07] px-4 py-1.5 text-center leading-tight shadow-gold-ring backdrop-blur-sm sm:hidden">
+      <span className="flex items-center justify-center gap-1.5 text-[13px] font-bold text-gold-bright">
+        <Icon.Calendar /> {MASTERCLASS.fechaLabel}
+      </span>
+      <span className="mt-0.5 block text-[11.5px] font-semibold text-ivory/85">
+        {MASTERCLASS.horaLabel} · {MASTERCLASS.zonaLabel}
+      </span>
+    </div>
+  )
+}
+
 export default function ReservaMasterclass() {
   const [formOpen, setFormOpen] = useState(false)
   const openForm = () => setFormOpen(true)
+
+  // Evergreen: re-renderiza al saltar de semana para que el chip de fecha (y el
+  // pie del CTA fijo) no se queden con la emisión ya pasada.
+  useEvergreenTarget(MASTERCLASS.targetISO)
 
   // La barra de urgencia (compartida) abre el popup vía evento global.
   useEffect(() => {
@@ -70,7 +95,10 @@ export default function ReservaMasterclass() {
           targetISO: MASTERCLASS.targetISO,
           label: 'La próxima clase en vivo empieza en',
           expiredLabel: EN_VIVO_AHORA,
+          // En móvil el conteo ya está en la barra fija de arriba.
+          hideOnMobile: true,
         }}
+        kicker={<FechaProximaClase />}
         banner={{ src: LANDING_BANNER['01'], alt: 'Masterclass gratis — Cómo adquirir propiedades en subasta, paso a paso, con Argenis y Carmen', ratio: '4x5' }}
         title={
           <span className="uppercase">
@@ -79,9 +107,13 @@ export default function ReservaMasterclass() {
           </span>
         }
         actions={
-          <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} size="lg" magnetic>
-            Reservar mi lugar
-          </CTAButton>
+          // `data-cta-anchor`: mientras este botón esté en pantalla, el CTA fijo
+          // de móvil se mantiene oculto (ver MobileStickyCTA).
+          <div data-cta-anchor>
+            <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} size="lg" magnetic>
+              Reservar mi lugar
+            </CTAButton>
+          </div>
         }
       />
 
@@ -249,13 +281,21 @@ export default function ReservaMasterclass() {
               className="items-center"
             />
           </div>
-          <div className="mt-7 flex justify-center">
+          <div data-cta-anchor className="mt-7 flex justify-center">
             <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} magnetic>
               Reserva tu cupo gratis
             </CTAButton>
           </div>
         </Container>
       </Section>
+
+      {/* CTA fijo al pie en móvil: aparece cuando ningún CTA está a la vista, así
+          el botón de registro siempre está a un pulgar de distancia. */}
+      <MobileStickyCTA
+        label="Reservar mi lugar gratis"
+        note={`Gratis · ${MASTERCLASS.fechaLabel} · ${MASTERCLASS.horaLabel}`}
+        onClick={openForm}
+      />
 
       {/* Popup de lujo con el form embebido (lo abren los CTAs) */}
       <FormModal open={formOpen} onClose={() => setFormOpen(false)} />
