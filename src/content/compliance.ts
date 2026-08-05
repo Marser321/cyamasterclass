@@ -69,8 +69,14 @@ export const SEGURIDAD_NOTE = {
 //  pasó a navy + DORADO METÁLICO sobrio (look del flyer oficial). Esto matiza —
 //  no anula — las reglas visuales de 00-SISTEMA §5/§6:
 //   · Dorado metálico sobrio SÍ · dorado neón/fluorescente NO.
-//   · Contador a una FECHA REAL (la próxima sesión) SÍ; countdown perpetuo o que
-//     se reinicia solo NO (eso sería "urgencia falsa"). Ver MASTERCLASS.fechaISO.
+//   · Contador a una FECHA REAL (la próxima sesión) SÍ. Desde 2026-08-05 la clase
+//     es EVERGREEN — se emite todos los martes 7 p.m. Miami — así que el contador
+//     rueda a la emisión siguiente cuando termina la de esta semana: sigue siendo
+//     una fecha real y la MISMA para todo el mundo. Ver MASTERCLASS_SCHEDULE en
+//     brand.ts y lib/schedule.ts.
+//     Lo que sigue prohibido: contador POR VISITANTE (arranca al cargar la página
+//     o vive en una cookie) y contador a una fecha en la que no hay clase — eso sí
+//     sería "urgencia falsa".
 //   · Toasts de actividad ("Fulano reservó") = QUITADOS del sitio en producción
 //     (eran nombres inventados de content/social-proof.ts). Para reactivarlos hay
 //     que alimentarlos con registros REALES del CRM — no fabricar prueba social

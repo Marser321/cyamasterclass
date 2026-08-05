@@ -48,8 +48,9 @@ export function LandingHero({
   tone?: 'charcoal' | 'petrol' | 'ivory'
   parallax?: boolean
   useVideo?: boolean
-  /** Solo donde hay fecha real (masterclass, intensivo). */
-  countdown?: { targetISO: string; label?: string; expiredLabel?: string }
+  /** Solo donde hay fecha real (masterclass, intensivo). `targetISO` puede ser
+   *  una función para horarios recurrentes (ver CountdownTimer / lib/schedule). */
+  countdown?: { targetISO: string | (() => string); label?: string; expiredLabel?: string }
   /** Banner enmarcado tras el H1. `src` se ignora hasta USE_LANDING_BANNER=true. */
   banner?: { src?: string; alt: string; ratio?: Ratio; focal?: string }
   kicker?: ReactNode
@@ -145,7 +146,7 @@ export function LandingHero({
         </DisplayHeading>
       </div>
       {bannerFillNode && (
-        <div className="h-[clamp(150px,calc(100svh_-_26rem),46svh)] w-full sm:h-[clamp(150px,calc(100svh_-_27rem),42svh)]">{bannerFillNode}</div>
+        <div className="h-[clamp(130px,calc(100svh_-_33rem),46svh)] w-full sm:h-[clamp(150px,calc(100svh_-_32rem),42svh)]">{bannerFillNode}</div>
       )}
       <div className="flex max-w-xl flex-col items-center gap-3">
         {sub && <div className="text-[15px] leading-relaxed text-ivory/75 sm:text-[17px]">{sub}</div>}

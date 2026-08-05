@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 import { CountdownTimer } from '../blocks'
-import { DEADLINES } from '../../content/brand'
+import { DEADLINES, type Deadline } from '../../content/brand'
 import { ArrowRight } from '../primitives/icons'
 import { openReservaForm } from '../forms/FormModal'
+import { useEvergreenTarget } from '../../lib/useEvergreenTarget'
 
 const ctaClass =
   'inline-flex shrink-0 items-center gap-1 rounded-full bg-gradient-to-b from-gold-bright to-gold-deep px-3.5 py-1.5 text-[12.5px] font-bold text-midnight transition hover:brightness-110 sm:text-[13px]'
@@ -12,8 +13,9 @@ const ctaClass =
  * en landings con una FECHA REAL (masterclass, intensivo) tomada de `DEADLINES`.
  * En páginas sin deadline (mentoría, comunidad, gracias, autoridad) se OCULTA —
  * así no se promociona la masterclass fuera de contexto ni se inventa urgencia.
- * Honesta: el contador apunta a un instante fijo; al pasar, estado grácil sin
- * reinicio (carve-out de compliance). El conteo lo delega al CountdownTimer.
+ * Honesta: el contador apunta al inicio de una sesión REAL (en la masterclass,
+ * la próxima emisión semanal); mientras está en el aire muestra el estado
+ * `barExpiredLabel`. El conteo lo delega al CountdownTimer.
  */
 function formatBarLabel(label: string) {
   // Coincide con fechas en español como "Martes 21 de julio", "10 de julio", etc.
@@ -39,7 +41,10 @@ function formatBarLabel(label: string) {
 
 export function UrgencyBar() {
   const { pathname } = useLocation()
-  const deadline = DEADLINES[pathname]
+  const deadline: Deadline | undefined = DEADLINES[pathname]
+  // Deadline recurrente: re-renderiza al saltar de semana para que `barLabel`
+  // (getter) no muestre una fecha ya pasada junto a un contador nuevo.
+  useEvergreenTarget(deadline?.targetISO)
   if (!deadline) return null
 
   return (
@@ -55,7 +60,11 @@ export function UrgencyBar() {
         <span aria-hidden className="hidden text-gold/25 sm:inline">
           |
         </span>
-        <CountdownTimer targetISO={deadline.targetISO} variant="inline" expiredLabel="Próxima fecha: pronto" />
+        <CountdownTimer
+          targetISO={deadline.targetISO}
+          variant="inline"
+          expiredLabel={deadline.barExpiredLabel ?? 'Próxima fecha: pronto'}
+        />
         {deadline.barCta.openForm ? (
           <button type="button" onClick={openReservaForm} className={ctaClass}>
             {deadline.barCta.label}

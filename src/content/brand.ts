@@ -4,6 +4,13 @@
 //  y 00-FUENTE-promesa-masterclass.md (9 fases, orden nuevo 2026-06-23).
 // ─────────────────────────────────────────────────────────────────────────
 
+import {
+  formatSessionDay,
+  nextSessionAt,
+  nextSessionISO,
+  type WeeklySchedule,
+} from '../lib/schedule'
+
 export const BRAND = {
   name: 'Magic Capital',
   tagline: 'Firma educativa de subastas tax deed y crédito empresarial.',
@@ -53,19 +60,44 @@ export const COHORTE = {
 } as const
 
 // Masterclass — fuente única para el banner-póster, el contador y la agenda.
-// ⚠ SUSTITUIR `fechaISO` por la fecha/hora REALES de la próxima sesión antes de
-// publicar. Próxima sesión: martes 21 jul 2026, 8:00 p.m. hora de Miami
-// (America/New_York, que en julio es EDT, UTC−04:00). El contador apunta a ese
-// instante absoluto; al pasar, muestra un estado grácil (no reinicia).
+// EVERGREEN (2026-08-05): la clase se emite TODAS LAS SEMANAS el mismo día y a
+// la misma hora, así que ya NO hay fecha que actualizar a mano. Todo se deriva
+// de `MASTERCLASS_SCHEDULE`: el contador, el chip de fecha, la barra de urgencia
+// y el .ics del calendario apuntan a la PRÓXIMA emisión real y ruedan solos a la
+// semana siguiente cuando la sesión termina.
+// ⚠ Para mover día u hora se toca SOLO `MASTERCLASS_SCHEDULE` (y `horaLabel`).
+export const MASTERCLASS_SCHEDULE: WeeklySchedule = {
+  /** 2 = martes (0 = domingo). */
+  weekday: 2,
+  /** 19:00 hora local de Miami = 7:00 p.m. */
+  hour: 19,
+  minute: 0,
+  /** La zona resuelve EDT/EST sola: siempre son las 9 p.m. en Miami. */
+  timeZone: 'America/New_York',
+  /** Duración ~60 min: mientras la clase está en el aire el contador marca cero
+   *  ("empieza ahora") y recién al terminar salta a la próxima semana. */
+  graceMinutes: 60,
+}
+
 export const MASTERCLASS = {
-  /** Instante absoluto de inicio (ISO con offset). */
-  fechaISO: '2026-07-21T20:00:00-04:00',
-  /** Etiqueta legible de día/hora (para chips del póster). */
-  fechaLabel: 'Martes 21 de julio',
-  horaLabel: '8:00 p.m.',
+  /** Instante absoluto de inicio de la PRÓXIMA emisión (ISO).
+   *  Getter: se recalcula en cada lectura, así nunca queda una fecha vieja. */
+  get fechaISO(): string {
+    return nextSessionISO(MASTERCLASS_SCHEDULE)
+  },
+  /** Etiqueta legible de la próxima emisión, p. ej. "Viernes 7 de agosto". */
+  get fechaLabel(): string {
+    return formatSessionDay(nextSessionAt(MASTERCLASS_SCHEDULE), MASTERCLASS_SCHEDULE.timeZone)
+  },
+  /** Día de la semana fijo, para copy tipo "todos los martes". */
+  diaSemanaLabel: 'martes',
+  horaLabel: '7:00 p.m.',
   zonaLabel: 'hora de Miami',
   plataforma: 'Zoom',
-} as const
+  /** Referencia estable (identidad de función constante) para pasarle el
+   *  objetivo al `CountdownTimer`, que lo re-evalúa en cada tick. */
+  targetISO: (): string => nextSessionISO(MASTERCLASS_SCHEDULE),
+}
 
 /** Construye un enlace wa.me con mensaje precargado. */
 export function waLink(message: string): string {
@@ -76,23 +108,32 @@ export function waLink(message: string): string {
 // (UrgencyBar). Solo van aquí las ofertas con FECHA REAL (masterclass, intensivo);
 // las atemporales (mentoría, comunidad) y las gracias NO tienen entrada → sin
 // contador ni barra (evita urgencia falsa, regla de marca). Compliance: el conteo
-// apunta a un instante fijo, sin reinicio.
+// apunta siempre a una sesión REAL — en la masterclass, a la próxima emisión
+// semanal (misma cuenta para todo el mundo, nunca un contador por visitante).
 export type Deadline = {
-  targetISO: string
+  /** Instante objetivo, o una función que lo resuelve (horario recurrente). */
+  targetISO: string | (() => string)
   /** Texto de la barra superior (p. ej. "Masterclass gratis · Martes 14 de julio"). */
   barLabel: string
   /** CTA de la barra. `openForm` abre el popup de reserva; si no, enlaza a `to`. */
   barCta: { label: string; to?: string; openForm?: boolean }
   /** Texto que precede al contador en el hero (p. ej. "La próxima sesión empieza en"). */
   heroLabel: string
+  /** Texto para cuando el contador llega a cero (sesión en curso / cerrada). */
+  barExpiredLabel?: string
 }
 
 export const DEADLINES: Record<string, Deadline> = {
   '/masterclass': {
-    targetISO: MASTERCLASS.fechaISO,
-    barLabel: `Masterclass gratis · ${MASTERCLASS.fechaLabel}`,
+    // Evergreen: función + getter, para que la barra siga a la próxima emisión
+    // sin depender del momento en que se cargó el módulo.
+    targetISO: MASTERCLASS.targetISO,
+    get barLabel(): string {
+      return `Masterclass gratis · ${MASTERCLASS.fechaLabel}`
+    },
     barCta: { label: 'Reservar gratis', openForm: true },
     heroLabel: 'La próxima clase en vivo empieza en',
+    barExpiredLabel: 'Empieza ahora',
   },
 }
 

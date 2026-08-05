@@ -30,6 +30,10 @@ const CAMBIOS = [
   { from: 'Contactos secretos', to: 'Portales públicos', icon: <Icon.Globe /> },
 ]
 
+// Estado del contador cuando la clase de esta semana está EN EL AIRE (la clase
+// es semanal: el cero solo ocurre durante la emisión, ver lib/schedule.ts).
+const EN_VIVO_AHORA = 'La clase está empezando ahora — reserva y te enviamos el enlace.'
+
 const APRENDERAS = [
   'Las 9 fases del Método MAP-9 para analizar una subasta.',
   'Cómo descartar las propiedades problemáticas antes de comprar.',
@@ -54,7 +58,7 @@ export default function ReservaMasterclass() {
       <LandingHero
         tone="charcoal"
         fillViewport
-        useVideo={false}
+        useVideo
         titleSize="lg"
         image={{
           src: img('01', '01-reserva-masterclass__hero-fundadores-trabajando.png'),
@@ -62,7 +66,22 @@ export default function ReservaMasterclass() {
           focal: '50% 35%',
           scrim: 'full',
         }}
-        countdown={{ targetISO: MASTERCLASS.fechaISO, label: 'La próxima clase en vivo empieza en' }}
+        countdown={{
+          targetISO: MASTERCLASS.targetISO,
+          label: 'La próxima clase en vivo empieza en',
+          expiredLabel: EN_VIVO_AHORA,
+        }}
+        kicker={
+          <div className="mx-auto w-full max-w-md rounded-2xl border border-gold/40 bg-gold/[0.08] px-4 py-2.5 text-center shadow-gold-ring backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-bright">
+              <Icon.Sparkles /> A petición del público
+            </div>
+            <p className="mt-1 text-[13.5px] font-semibold leading-tight text-ivory sm:text-[15px]">
+              Zoom resumen de <span className="text-gold-bright">1 hora</span>, netamente práctico —{' '}
+              <span className="italic text-ivory/75">«Cómo comprar propiedades de subasta paso a paso»</span>
+            </p>
+          </div>
+        }
         banner={{ src: LANDING_BANNER['01'], alt: 'Masterclass gratis — Cómo adquirir propiedades en subasta, paso a paso, con Argenis y Carmen', ratio: '4x5' }}
         title={
           <span className="uppercase">
@@ -235,7 +254,11 @@ export default function ReservaMasterclass() {
             e información correcta.
           </p>
           <div className="mt-6">
-            <CountdownTimer targetISO={MASTERCLASS.fechaISO} className="items-center" />
+            <CountdownTimer
+              targetISO={MASTERCLASS.targetISO}
+              expiredLabel={EN_VIVO_AHORA}
+              className="items-center"
+            />
           </div>
           <div className="mt-7 flex justify-center">
             <CTAButton onClick={openForm} icon={<Icon.ArrowRight />} magnetic>

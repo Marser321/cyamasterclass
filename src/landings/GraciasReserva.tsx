@@ -18,10 +18,14 @@ import { FOUNDERS, MASTERCLASS } from '../content/brand'
 import { img } from '../content/images'
 import { sectionBg } from '../content/section-backgrounds'
 import { toICSDate } from '../lib/ics'
+import { useEvergreenTarget } from '../lib/useEvergreenTarget'
 
 // Fecha/hora — derivada de la fuente única (brand.ts) para que coincida con el
 // contador de la página de reserva y con el .ics del botón de calendario.
-const FECHA = `${MASTERCLASS.fechaLabel} · ${MASTERCLASS.horaLabel} · ${MASTERCLASS.zonaLabel}`
+// Es una FUNCIÓN, no una constante de módulo: la masterclass es evergreen y la
+// fecha rueda cada semana, así que se lee en cada render (no al importar).
+const fechaCompleta = () =>
+  `${MASTERCLASS.fechaLabel} · ${MASTERCLASS.horaLabel} · ${MASTERCLASS.zonaLabel}`
 
 // Enlace directo al grupo/comunidad de WhatsApp (acción principal del gracias).
 const COMUNIDAD_URL = 'https://chat.whatsapp.com/K5DcdD6vYf8JnxNzWUWEY3'
@@ -74,6 +78,9 @@ const PREPARACION = [
 ]
 
 export default function GraciasReserva() {
+  // Masterclass evergreen: re-renderiza al saltar de semana, así el chip de
+  // fecha y el .ics de esta página nunca muestran una emisión ya pasada.
+  useEvergreenTarget(MASTERCLASS.targetISO)
   return (
     <LandingLayout hideWhatsApp>
       {/* 1 · Confirmación (hero a fondo, centrado) */}
@@ -102,7 +109,7 @@ export default function GraciasReserva() {
           </p>
           <div className="mt-6 flex justify-center">
             <Badge tone="ivory">
-              <Icon.Calendar /> {FECHA}
+              <Icon.Calendar /> {fechaCompleta()}
             </Badge>
           </div>
           <div className="mt-8 flex flex-col items-center gap-4">

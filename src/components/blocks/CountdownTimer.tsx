@@ -2,13 +2,22 @@ import { useEffect, useState } from 'react'
 import { cn } from '../../lib/cn'
 
 // ─────────────────────────────────────────────────────────────────────────
-//  Contador a una FECHA FIJA real (la próxima sesión de la masterclass).
-//  Honesto a propósito: apunta a un instante absoluto; al pasar, muestra un
-//  estado grácil — NO se reinicia solo (eso sería un "countdown falso").
+//  Contador a una fecha REAL: o un instante fijo (`targetISO` string), o el
+//  inicio de la próxima emisión de un evento recurrente (`targetISO` función,
+//  ver lib/schedule.ts). En el caso recurrente el objetivo se re-evalúa en cada
+//  tick, así que al terminar una sesión el contador RUEDA solo a la siguiente
+//  sin recargar la página. Sigue siendo honesto: la cuenta es la misma para
+//  todo el mundo y siempre cae en una sesión que de verdad se emite — nunca un
+//  contador por visitante que arranca al cargar la página.
 //  Chips estilo póster con hairline dorado. reduced-motion: sin transiciones.
 // ─────────────────────────────────────────────────────────────────────────
 
 type Parts = { dias: number; horas: number; min: number; seg: number; done: boolean }
+
+/** Resuelve el objetivo (ms). Con función, se lee de nuevo en cada tick. */
+function resolveTarget(target: string | (() => string)): number {
+  return new Date(typeof target === 'function' ? target() : target).getTime()
+}
 
 function partsUntil(target: number, now: number): Parts {
   let diff = Math.max(0, target - now)
@@ -52,25 +61,27 @@ export function CountdownTimer({
   variant = 'chips',
   className,
 }: {
-  targetISO: string
+  /** Instante fijo (ISO) o función que devuelve el ISO de la próxima sesión.
+   *  Si es función debe ser una referencia ESTABLE (definida a nivel de módulo,
+   *  p. ej. `MASTERCLASS.targetISO`) para no recrear el intervalo en cada tick. */
+  targetISO: string | (() => string)
   label?: string
   expiredLabel?: string
   /** `chips` = chips estilo póster (hero). `inline` = string compacto (barra slim). */
   variant?: 'chips' | 'inline'
   className?: string
 }) {
-  const target = new Date(targetISO).getTime()
-  const [parts, setParts] = useState<Parts>(() => partsUntil(target, Date.now()))
+  const [parts, setParts] = useState<Parts>(() => partsUntil(resolveTarget(targetISO), Date.now()))
 
   useEffect(() => {
-    if (Number.isNaN(target)) return
-    const tick = () => setParts(partsUntil(target, Date.now()))
+    if (Number.isNaN(resolveTarget(targetISO))) return
+    const tick = () => setParts(partsUntil(resolveTarget(targetISO), Date.now()))
     tick()
     const id = window.setInterval(tick, 1000)
     return () => window.clearInterval(id)
-  }, [target])
+  }, [targetISO])
 
-  if (Number.isNaN(target)) return null
+  if (Number.isNaN(resolveTarget(targetISO))) return null
 
   // Variante compacta para la barra de urgencia: `12d · 04h · 33m · 12s`.
   if (variant === 'inline') {
